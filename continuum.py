@@ -116,10 +116,19 @@ class Continuum(object):
 		# each server
 		for server in self.servers:
 			dots = int(self.totaldots * (server.capacity / capacity))
-			for x in xrange(dots / 4):
+			d, m = divmod(dots, 4)
+			for x in xrange(d):
+				# generate 4 dots per iteration
 				positions = self._hash('%s-%d-%d' % (
 					server.hostname, server.port, x))
 				for position in positions:
+					entry = ContinuumEntry(position, server)
+					continuum.append(entry)
+			if m:
+				# generate remaining dots
+				positions = self._hash('%s-%d-%d' % (
+					server.hostname, server.port, d))
+				for position in xrange(m):
 					entry = ContinuumEntry(position, server)
 					continuum.append(entry)
 		
