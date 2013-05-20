@@ -28,6 +28,7 @@ except ImportError:
 	from md5 import new as md5
 import math
 import struct
+import collections
 
 # total number of server entries on the continuum
 DEFAULT_TOTAL_DOTS = 1000
@@ -93,6 +94,11 @@ class Continuum(object):
 		if self.autogenerate:
 			self.generate()
 		return server
+
+	def add_multi_servers(self, server_list):
+		"""Add multiple definitions of server"""
+		assert isinstance(server_list, collections.Iterable), TypeError("server_list should be iterable.")
+		return map(lambda s: self.add_server(*s), server_list)
 	
 	def remove_server(self, server):
 		"""Remove a server definition from the continuum."""
